@@ -9,9 +9,9 @@ namespace rss_back.Controllers
     [ApiController]
     public class ItemController : ControllerBase
     {
-        ItemService _service;
+        IItem _service;
 
-        public ItemController(ItemService service)
+        public ItemController(IItem service)
         {
             _service = service;
         }
@@ -20,7 +20,7 @@ namespace rss_back.Controllers
         public IEnumerable<Item> GetAll() { return _service.GetAll(); }
 
         [HttpGet("{guid}")]
-        public ActionResult<Item> GetByGuid(Guid guid) 
+        public ActionResult<Item> GetByGuid(string guid) 
         {
             var item = _service.GetByGuid(guid);
             if(item is not null)
@@ -40,8 +40,8 @@ namespace rss_back.Controllers
             return CreatedAtAction(nameof(GetByGuid), new { guid = item.Guid }, item);
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(Guid guid)
+        [HttpDelete("{guid}")]
+        public IActionResult Delete(string guid)
         {
             var item = _service.GetByGuid(guid);
 

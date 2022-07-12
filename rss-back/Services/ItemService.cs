@@ -2,7 +2,7 @@
 using rss_back.Models;
 namespace rss_back.Services
 {
-    public class ItemService
+    public class ItemService : IItem
     {
         private readonly RSSContext _context;
         public ItemService(RSSContext context)
@@ -15,9 +15,9 @@ namespace rss_back.Services
             return _context.Items.ToList();
         }
 
-        public Item GetByGuid(Guid guid)
+        public Item GetByGuid(string guid)
         {
-            return _context.Items.SingleOrDefault(it => it.Guid == guid);
+            return _context.Items.SingleOrDefault(it => it.Guid.ToString() == guid);
         }
 
         public Item Create(Item item)
@@ -27,13 +27,13 @@ namespace rss_back.Services
             return item;
         }
 
-        public void Delete(Guid guid)
+        public void Delete(string guid)
         {
             var item = _context.Items.Find(guid);
             if(item is not null)
             {
                 _context.Items.Remove(item);
-                _context.SaveChanges();
+                _context.SaveChanges();  
             }
         }
     }

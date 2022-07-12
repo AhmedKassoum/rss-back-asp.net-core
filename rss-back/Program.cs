@@ -1,3 +1,6 @@
+using rss_back.Services;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,7 +10,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+//Add EFCore Context
+builder.Services.AddDbContext<rss_back.Context.RSSContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("RSSContextConnection")));
+
+// Add services to dependency injection container
+builder.Services.AddScoped<IItem,ItemService>();
+
 var app = builder.Build();
+
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
