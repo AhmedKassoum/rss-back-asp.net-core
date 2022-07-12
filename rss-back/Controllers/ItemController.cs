@@ -37,7 +37,14 @@ namespace rss_back.Controllers
         public ActionResult Create(Item newItem)
         {
             var item=_service.Create(newItem);
-            return CreatedAtAction(nameof(GetByGuid), new { guid = item.Guid }, item);
+            return Ok();
+        }
+
+        [HttpPatch("{guid}")]
+        public ActionResult Update(string guid,Item item)
+        {
+            var updatedItem = _service.Update(guid,item);
+            return Ok(updatedItem);
         }
 
         [HttpDelete("{guid}")]

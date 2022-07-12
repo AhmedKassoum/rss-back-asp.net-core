@@ -7,6 +7,7 @@ namespace rss_back.Services
         public IEnumerable<Item> GetAll();
         public Item GetByGuid(string guid);
         public Item Create(Item item);
+        public Item Update(string guid, Item item);
         public void Delete(string guid);
     }
 }
