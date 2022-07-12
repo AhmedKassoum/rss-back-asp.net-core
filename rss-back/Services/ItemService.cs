@@ -1,4 +1,5 @@
-﻿using rss_back.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using rss_back.Context;
 using rss_back.Models;
 namespace rss_back.Services
 {
@@ -12,12 +13,20 @@ namespace rss_back.Services
 
         public IEnumerable<Item> GetAll()
         {
-            return _context.Items.ToList();
+            return _context.Items
+                .Include(it=>it.Content)
+                .Include(it=>it.Image)
+                .Include(it=>it.Creator)
+                .ToList();
         }
 
         public Item GetByGuid(string guid)
-        {
-            return _context.Items.SingleOrDefault(it => it.Guid.ToString() == guid);
+        {   
+            return _context.Items
+                .Include(it => it.Image)
+                .Include(it=>it.Content)
+                .Include(it=>it.Creator)
+                .SingleOrDefault(it => it.Guid.ToString().Equals(guid));
         }
 
         public Item Create(Item item)
@@ -29,7 +38,7 @@ namespace rss_back.Services
 
         public void Delete(string guid)
         {
-            var item = _context.Items.Find(guid);
+            var item = GetByGuid(guid);
             if(item is not null)
             {
                 _context.Items.Remove(item);
